@@ -85,6 +85,7 @@ async def run_search_logic(keyword: str, num_results: int, repository: SearchRep
             repository.save(result)
         
         # 4. 성공 알림 및 상태 기록
+        st.toast(f"✅ '{keyword}' 분석이 완료되었습니다!", icon="🚀")
         st.success(f"'{keyword}' 검색 완료! {len(articles)}건의 뉴스를 찾았습니다.")
         st.session_state.last_result = result
         
@@ -189,14 +190,21 @@ def main():
         button svg,
         div[data-testid="stExpander"] header svg,
         div[data-testid="stExpander"] header span[data-testid="stIcon"],
+        div[data-testid="stIconMaterial"], /* Material Icon 텍스트 누출 방지 */
+        [data-testid="stIconMaterial"],
         div[data-baseweb="select"] svg,
         [data-testid="stSidebar"] [data-testid="stIcon"],
         .st-emotion-cache-1vt4y43, /* 아이콘 컨테이너 */
-        .st-emotion-cache-1idxhyc  /* 화살표 컨테이너 */ {
+        .st-emotion-cache-1idxhyc, /* 화살표 컨테이너 */
+        .st-emotion-cache-1c9yjad, /* 유저가 리포트한 특정 클래스 */
+        .exvv1vr0 {
             display: none !important;
             visibility: hidden !important;
             width: 0 !important;
             height: 0 !important;
+            font-size: 0 !important;
+            color: transparent !important;
+            line-height: 0 !important;
         }
 
         /* 3. 사이드바 확장기(사용방법 등) 내부 텍스트 겹침 방지 */

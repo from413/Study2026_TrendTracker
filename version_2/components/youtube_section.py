@@ -25,10 +25,28 @@ def render_youtube_list(videos: List[YouTubeVideo]):
                     padding: 12px;
                     margin-bottom: 20px;
                     background-color: #ffffff;
-                    transition: transform 0.2s ease;
-                " onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                    transition: all 0.3s ease;
+                    position: relative;
+                " class="yt-card">
                     <a href="{video.url}" target="_blank" style="text-decoration: none; color: inherit;">
-                        <img src="{video.thumbnail_url}" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="position: relative; overflow: hidden; border-radius: 8px; margin-bottom: 10px;">
+                            <img src="{video.thumbnail_url}" style="width: 100%; display: block; transition: transform 0.3s ease;">
+                            <div style="
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                background: rgba(255, 0, 0, 0.8);
+                                border-radius: 50%;
+                                width: 40px;
+                                height: 40px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                color: white;
+                                font-size: 1.2rem;
+                            ">▶</div>
+                        </div>
                         <p style="
                             font-weight: 600;
                             font-size: 0.95rem;
@@ -39,11 +57,10 @@ def render_youtube_list(videos: List[YouTubeVideo]):
                             overflow: hidden;
                             color: #000000;
                         ">{video.title}</p>
-                        <p style="
-                            font-size: 0.8rem;
-                            color: #666666;
-                            margin: 0;
-                        ">출시일: {video.published_date[:10] if video.published_date else '정보 없음'}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.75rem; color: #666;">📅 {video.published_date[:10] if video.published_date else '최근'}</span>
+                            <span style="font-size: 0.75rem; color: #ff0000; font-weight: 700;">YouTube</span>
+                        </div>
                     </a>
                 </div>
                 """,

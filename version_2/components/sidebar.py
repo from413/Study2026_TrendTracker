@@ -10,6 +10,22 @@ def render_sidebar_header():
         <div style="padding: 10px 0;">
             <h1 style="font-size: 1.5rem; font-weight: 800; margin: 0;">📰 TrendTracker</h1>
             <p style="font-size: 0.85rem; color: #666; margin-top: 5px;">AI 뉴스 통합 및 분석 서비스</p>
+            <div style="
+                margin-top: 15px;
+                padding: 8px 12px;
+                background: #eef2ff;
+                border-radius: 8px;
+                border: 1px solid #c7d2fe;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            ">
+                <span style="position: relative; display: flex; h: 10px; w: 10px;">
+                    <span style="animate: ping; position: absolute; display: inline-flex; height: 100%; width: 100%; border-radius: 100%; background: #4f46e5; opacity: 0.75;"></span>
+                    <span style="position: relative; display: inline-flex; border-radius: 100%; height: 8px; width: 8px; background: #4f46e5;"></span>
+                </span>
+                <span style="font-size: 0.75rem; color: #4338ca; font-weight: 600;">실시간 트렌드 분석 활성화 중</span>
+            </div>
         </div>
         """,
         unsafe_allow_html=True
@@ -29,18 +45,22 @@ def render_settings() -> int:
 
 def render_info():
     """사용법 안내"""
-    with st.sidebar.expander("ℹ️ 사용 방법", expanded=False):
+    with st.sidebar.expander("💡 사용 방법 안내", expanded=False):
         st.markdown("""
-        1. **키워드**를 입력하거나 **카테고리**를 선택하세요.
-        2. **AI 요약**과 **감성 분석** 결과를 확인합니다.
-        3. 개별 기사를 클릭하여 상세 내용을 확인하세요.
-        """)
+        <div style="font-size: 0.9rem; line-height: 1.6;">
+        1. 🔍 <b>키워드</b>를 입력하거나 상단 <b>카테고리</b>를 선택하세요.<br>
+        2. ✨ <b>AI 요약</b>과 📊 <b>감성 분석</b> 결과를 확인합니다.<br>
+        3. 📺 관련 <b>YouTube 영상</b>으로 입체적인 정보를 얻으세요.
+        </div>
+        """, unsafe_allow_html=True)
     
-    with st.sidebar.expander("💾 데이터 관리", expanded=False):
+    with st.sidebar.expander("📂 데이터 및 기록 관리", expanded=False):
         st.markdown("""
-        - 검색 기록은 `data/search_history.csv`에 저장됩니다.
-        - 아래 버튼을 사용하여 기록을 관리할 수 있습니다.
-        """)
+        <div style="font-size: 0.9rem; line-height: 1.6;">
+        - 검색 기록은 <code>data/search_history.csv</code>에 안전하게 저장됩니다.<br>
+        - 과거 기록을 선택하여 언제든 다시 분석할 수 있습니다.
+        </div>
+        """, unsafe_allow_html=True)
 
 def render_history_list(search_keys: List[str], keywords_map: dict) -> dict:
     """검색 기록 관리 UI"""
