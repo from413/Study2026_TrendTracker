@@ -1,13 +1,41 @@
-# 검색창(main화면)
-# components/search_form.py
-    with st.container():
+학습과 확장에 추천되는 방향에서 벗어나 제어흐름이 망가진다고 판단되면
+해당 요구사항은 반영하지말고 나머지 작업만 진행해줘.(우선순위가 낮은 이유와 함께 답변 로드맵에 설명 추가)
 
-        if search_button:
+## 요구 사항
+1. 사이드바 및 뉴스 목록 아이콘 텍스트 누출(`_arrow_right`) 문제 ✅ 완료
+    * 사이드바의 '사용방법', '데이터관리' 버튼 및 뉴스 목록의 확장기에서 발생하는 `_arrow_right` 텍스트 누출 문제를 CSS 합자(ligatures) 비활성화 및 아이콘 컨테이너 숨김 처리를 통해 해결했습니다.
 
-# 사이드바
-# components/sidebar.py
-def render_sidebar_header():
-st.sidebar.markdown("**키워드로 뉴스를 검색하고 AI가 요약해드립니다**")의 '진하게'를 취소 시켜줘.
+## ✅ 최근 업데이트 (Recent Updates)
+1. **오류 해결**: `TypeError: 'coroutine' object is not iterable` (홈 섹션 비동기 처리 오류) 해결
+2. **상단 네비게이션 도입**: Daum 뉴스 스타일의 카테고리 헤더(`components/header.py`) 추가 및 중앙 정렬 적용
+3. **디자인 전면 개편**: Vercel 스타일의 미니멀하고 세련된 UI 적용 (Inter 폰트, 8px 라운딩, 화이트 테마)
+4. **비동기 성능 최적화**: 뉴스 검색, 요약, 감성 분석, 이미지 생성을 비동기 병렬 처리하여 응답 속도 대폭 개선
+5. **AI 콘텐츠 확장**: 뉴스 요약 기반 AI 이미지 생성 기능(Imagen 3) 추가
 
-# 검색결과
-# components/result_section.py
+## 🏗️ 현재 시스템 계층 구조 (System Hierarchy)
+1. **Presentation Layer**: `app.py`, `components/*.py` (비동기 루프, Vercel 디자인, AI 이미지/유튜브 렌더링)
+2. **Service Layer**: `services/*.py` (Async API 통신 - Tavily, Gemini, Imagen 3)
+3. **Domain Layer**: `domain/*.py` (데이터 모델 - NewsArticle, SearchResult, YouTubeVideo)
+4. **Repository Layer**: `repositories/*.py` (CSV 기반 영속성 관리)
+
+## 🔄 현재 제어 흐름 (Control Flow)
+- **뉴스 분석 파이프라인**: 검색 요청 시 `뉴스 검색 -> [요약, 감성 분석, 이미지 생성, YouTube 검색]`을 비동기 병렬(`asyncio.gather`)로 처리하여 대기 시간을 최소화합니다.
+- **홈 화면**: 최신 트렌드를 보여주는 3개 섹션을 동시에 로드합니다.
+
+## 🚀 향후 진행 계획 (Future Roadmap)
+
+### 1단계: 멀티미디어 및 분석 심화 (진행 중)
+* **YouTube 연동**: 키워드 관련 최신 영상 정보 및 썸네일 통합 검색 기능 추가. ✅ 완료
+* **실시간 감성 트렌드**: 특정 키워드의 여론 변화 추이를 시각화하는 라이브 차트 도입.
+
+### 2단계: 자동화 및 알림 서비스
+* **이메일 리포트**: 관심 키워드에 대한 정기적인 AI 요약 보고서 발송 (Newsletter).
+* **텔레그램 알림**: 실시간 트렌드 변동 시 텔레그램 메시지 발송.
+
+### 3단계: 전문 분석 및 리포트
+* **보고서 내보내기**: 전문가용 PDF 리포트 생성 기능.
+* **데이터 관리**: 검색 기록 고급 필터링 및 통계 제공.
+
+---
+## 🚀 [propose] 단계별 확장 제안
+* 단순한 UI 장식보다는 **데이터의 깊이(YouTube)**와 **사용자 연결성(알림)** 기능에 집중하여 시스템의 가치와 견고함을 동시에 확보합니다.

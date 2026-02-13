@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 import pandas as pd
 from domain.news_article import NewsArticle
+from domain.youtube_video import YouTubeVideo
 
 @dataclass
 class SearchResult:
@@ -12,6 +13,9 @@ class SearchResult:
     keyword: str
     articles: List[NewsArticle]
     ai_summary: str = ""
+    sentiment_data: dict = field(default_factory=lambda: {"positive": 50, "neutral": 30, "negative": 20})
+    ai_image: Optional[bytes] = None
+    youtube_videos: List[YouTubeVideo] = field(default_factory=list)
 
     def to_dataframe(self) -> pd.DataFrame:
         """
@@ -28,7 +32,10 @@ class SearchResult:
                 "url": article.url,
                 "snippet": article.snippet,
                 "pub_date": article.pub_date,
-                "ai_summary": self.ai_summary
+                "ai_summary": self.ai_summary,
+                "positive": self.sentiment_data.get("positive", 0),
+                "neutral": self.sentiment_data.get("neutral", 0),
+                "negative": self.sentiment_data.get("negative", 0)
             })
         
         return pd.DataFrame(data)

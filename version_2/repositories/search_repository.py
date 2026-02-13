@@ -18,7 +18,8 @@ class SearchRepository:
         self.csv_path = csv_path
         self.columns = [
             "search_key", "search_time", "keyword", "article_index",
-            "title", "url", "snippet", "pub_date", "ai_summary"
+            "title", "url", "snippet", "pub_date", "ai_summary",
+            "positive", "neutral", "negative"
         ]
         self._ensure_directory()
 
@@ -106,7 +107,12 @@ class SearchRepository:
             search_time=pd.to_datetime(first_row["search_time"]),
             keyword=str(first_row["keyword"]),
             articles=articles,
-            ai_summary=str(first_row["ai_summary"])
+            ai_summary=str(first_row["ai_summary"]),
+            sentiment_data={
+                "positive": int(float(first_row.get("positive", 33))),
+                "neutral": int(float(first_row.get("neutral", 34))),
+                "negative": int(float(first_row.get("negative", 33)))
+            }
         )
 
     def get_all_as_csv(self) -> str:
@@ -117,3 +123,36 @@ class SearchRepository:
         if df.empty:
             return ""
         return df.to_csv(index=False, encoding='utf-8-sig')
+
+    def delete_by_key(self, search_key: str) -> bool:
+        """
+        특정 search_key에 해당하는 모든 행을 삭제합니다.
+        """
+        try:
+            if not os.path.exists(self.csv_path):
+                return False
+                
+            df = pd.read_csv(self.csv_path)
+            # 해당 키를 제외한 데이터만 유지
+            new_df = df[df["search_key"] != search_key]
+            
+            if len(new_df) == len(df):
+                return False # 삭제된 내용 없음
+                
+            new_df.to_csv(self.csv_path, index=False, encoding='utf-8-sig')
+            return True
+        except Exception as e:
+            print(f"로그: 데이터 삭제 실패 - {e}")
+            return False
+
+    def clear_all(self) -> bool:
+        """
+        모든 검색 기록을 삭제합니다.
+        """
+        try:
+            if os.path.exists(self.csv_path):
+                os.remove(self.csv_path)
+            return True
+        except Exception as e:
+            print(f"로그: 전체 삭제 실패 - {e}")
+            return False
